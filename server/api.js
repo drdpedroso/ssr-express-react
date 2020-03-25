@@ -2,8 +2,14 @@ const express = require('express')
 const cors = require('cors')
 const http = require('http')
 const bodyParser = require('body-parser')
-
 const app = express()
+
+const mock = {
+    "BRL": "5.400",
+    "EUR": "0.920",
+    "CAD": "1.440",
+    "BTC": "20000"
+}
 
 app.use(cors())
 app.use(bodyParser.json())
@@ -79,6 +85,14 @@ safeRouter.get("/crypto/btc", (req, res) => {
     );
 });
 
+
+app.post("/crypto/btc", (req, res) => {
+   res.send({ message: "Valor alterado com sucesso!" })
+})
+
+app.get("/crypto/btc", (req, res) => {
+   res.send({ message: "Valor alterado com sucesso!" })
+})
 
 app.use(safeRouter)
 

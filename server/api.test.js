@@ -66,4 +66,32 @@ describe('/crypto/btc', () => {
             expect(response.statusCode).toBe(401)
         })
     });
+
+    test('should return correct values after post request', () => {
+        const agent = request('http://localhost:3001')
+        return agent.post("/crypto/btc").set('Authorization', 'I8iFvrXDQITNoYaa').send({ "value": 20000.0000 }).then(response => {
+            expect(response.statusCode).toBe(200)
+            expect(response.body.message).toBe("Valor alterado com sucesso!")
+            agent.get("/crypto/btc").set('Authorization', 'I8iFvrXDQITNoYaa').then(res => {
+                expect(response.statusCode).toBe(200)
+                expect(res.bpi.USD.rate_float).toBe(20000.0000)
+                const usdRate = res.bpi.USD.rate_float * Number(currenciesMock.BRL)
+                const eurRate = res.bpi.USD.rate_float * Number(currenciesMock.EUR)
+                const cadRate = res.bpi.USD.rate_float * Number(currenciesMock.CAD)
+                expect(res.bpi.USD.code).toBe('USD')
+                expect(res.bpi.BRL.rate_float).toBe(usdRate)
+                expect(res.bpi.EUR.rate_float).toBe(eurRate)
+                expect(res.bpi.CAD.rate_float).toBe(cadRate)
+            })
+        })
+    });
+
+    test('should return correct values after post request', () => {
+        const agent = request('http://localhost:3001')
+        return agent.post("/crypto/btc").set('Authorization', 'I8iFvrXDQITNoYaa').send({ empty: 'body' }).then(response => {
+            expect(response.statusCode).toBe(400)
+            expect(response.body.message).toBe("Valor inválido")
+
+        })
+    });
 })
