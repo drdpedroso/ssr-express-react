@@ -1,8 +1,8 @@
-import React, {useEffect, useState} from 'react';
+import React from 'react';
 import './App.css'
 import useAxios from 'axios-hooks'
 function App() {
-  const [{ data, loading }] = useAxios(
+  const [{ data }] = useAxios(
       'http://localhost:3001/images'
   )
 
